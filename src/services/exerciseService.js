@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "http://192.168.0.13:3001/api/exercises";
+const baseUrl = "https://powerful-retreat-80063.herokuapp.com/api/exercises";
 let token = null;
 
 const setToken = (newToken) => {

@@ -1,6 +1,6 @@
 import axios from "axios";
-const loginUrl = "http://192.168.0.13:3001/api/login";
-const signUpUrl = "http://192.168.0.13:3001/api/users";
+const loginUrl = "https://powerful-retreat-80063.herokuapp.com/api/login";
+const signUpUrl = "https://powerful-retreat-80063.herokuapp.com/api/users";
 
 const login = async (newObject) => {
 

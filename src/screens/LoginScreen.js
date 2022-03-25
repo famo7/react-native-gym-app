@@ -2,23 +2,27 @@ import React, {useState} from 'react'
 import { StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userService from "../services/userService"
-import { Input, Layout, Button } from "@ui-kitten/components";
+import { Input, Layout, Button, Spinner } from "@ui-kitten/components";
 
 export default function LoginScreen({navigation, setUser, user}) {
   
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
-
+    const [loading, setLoading] = useState(false)
    
 
     const handleSubmit = async () =>{
-       
-         const response = await userService.login({
-           username: userName,
-           password: password,
-         });
-         setUser(response);
-
+         setLoading(true)
+        try {
+           const response = await userService.login({
+             username: userName,
+             password: password,
+           });
+           setUser(response);
+           setLoading(false)
+        } catch (error) {
+          setLoading(false);
+        }
          try {
            const jsonValue = JSON.stringify(response);
            await AsyncStorage.setItem("user", jsonValue);
@@ -40,7 +44,8 @@ export default function LoginScreen({navigation, setUser, user}) {
         onChangeText={(val) => setPassword(val)}
       />
       <Layout>
-        <Button style={styles.button} onPress={handleSubmit} >
+      
+        <Button style={styles.button} onPress={handleSubmit}>
           Sign in
         </Button>
         <Button
@@ -48,8 +53,12 @@ export default function LoginScreen({navigation, setUser, user}) {
           onPress={() => navigation.navigate("SignUp")}
           appearance="ghost"
         >
-          Sign up
+          Don't have an account yet? Sign Up
         </Button>
+      </Layout>
+      <Layout style={{ flexDirection: "row", justifyContent: "center" }}>
+        
+        {loading && <Spinner />}
       </Layout>
     </Layout>
   );
