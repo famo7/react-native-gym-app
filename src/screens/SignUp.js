@@ -1,28 +1,38 @@
 import React, { useState } from "react";
 import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
+  StyleSheet
 } from "react-native";
-import { Input, Layout, Button} from "@ui-kitten/components";
+import { Input, Layout, Button, Text} from "@ui-kitten/components";
 import userService from "../services/userService"
+import validate from "../validate";
 export default function LoginScreen({ navigation }) {
   const [name, setName] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("")
 
   const handleSubmit = async () => {
     try {
-       await userService.createUser({
-        name: name,
-        username: userName,
-        password: password,
+      await validate.userSchema.validate({
+        name,
+        userName,
+        password,
       });
-      navigation.navigate("Login")
+      try {
+        await userService.createUser({
+          name: name,
+          username: userName,
+          password: password,
+        });
+        navigation.navigate("Login");
+      } catch (error) {
+        console.log("Error");
+      }
     } catch (error) {
-      console.log("Error");
+        setError(error.message);
+        
     }
+    
     
 
     
@@ -46,10 +56,12 @@ export default function LoginScreen({ navigation }) {
         onChangeText={(val) => setPassword(val)}
       />
 
-      <Layout >
+      <Layout>
         <Button onPress={handleSubmit}>Sign up</Button>
       </Layout>
-      
+      <Layout style={{flexDirection:"row", justifyContent:"center"}}>
+        <Text status="danger">{error}</Text>
+      </Layout>
     </Layout>
   );
 }

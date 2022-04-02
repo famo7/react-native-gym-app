@@ -11,10 +11,10 @@ export default function SetComponent({exerciseId, set}) {
    const [isPlaying, setIsPlaying] = useState(false)
    const [restTime, setRestTime] = useState(60)
    const [reps, setReps] = useState(() =>{
-     return set === undefined ? 0:set.reps
+     return set === undefined ? "":set.reps
    })
    const [weight, setWeight] = useState(() => {
-     return set === undefined ? 0 : set.weight;
+     return set === undefined ? "" : set.weight;
    });
    const [editable, seteditable] = useState(true)
 
